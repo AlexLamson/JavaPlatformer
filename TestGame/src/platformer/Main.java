@@ -8,12 +8,15 @@ public class Main extends Applet implements Runnable
 {
 	private static int pixelSize = 2;
 	public static double sX = 0, sY = 0;
+	public static double dir = 0;
+	
 	public static Dimension size = new Dimension(700,560);		//will hold the window dimensions
 	public static Dimension pixel = new Dimension(size.width/pixelSize, size.height/pixelSize);
 
 	public static String windowName = "Alex's 2D platformer";
 	
 	public static boolean isRunning = false;
+	public static boolean isMoving = false;
 	
 	private Image screen;
 	
@@ -22,8 +25,9 @@ public class Main extends Applet implements Runnable
 	
 	public Main()
 	{
-//		setSize(size);			//technically don't need this
 		setPreferredSize(size);
+		
+		addKeyListener(new Listening());
 	}
 	
 	public void start()

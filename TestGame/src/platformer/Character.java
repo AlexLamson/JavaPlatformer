@@ -6,6 +6,7 @@ public class Character extends DoubleRectangle
 {
 	
 	public double fallingSpeed = 1.2;
+	public double movingSpeed = 0.5;
 	
 	public Character(int width, int height)
 	{
@@ -18,6 +19,12 @@ public class Character extends DoubleRectangle
 		{
 			y += fallingSpeed;
 			Main.sY += fallingSpeed;
+		}
+		
+		if(Main.isMoving == true)
+		{
+			x += Main.dir;
+			Main.sX += Main.dir;
 		}
 	}
 	
