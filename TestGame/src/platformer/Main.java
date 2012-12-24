@@ -7,13 +7,18 @@ import java.awt.*;
 public class Main extends Applet implements Runnable
 {
 	private static int pixelSize = 2;
-	
+	public static double sX = 0, sY = 0;
 	public static Dimension size = new Dimension(700,560);		//will hold the window dimensions
 	public static Dimension pixel = new Dimension(size.width/pixelSize, size.height/pixelSize);
+
 	public static String windowName = "Alex's 2D platformer";
+	
 	public static boolean isRunning = false;
 	
 	private Image screen;
+	
+	public static Level level;
+	public static Character character;
 	
 	public Main()
 	{
@@ -24,6 +29,9 @@ public class Main extends Applet implements Runnable
 	public void start()
 	{
 		//defining objects
+		new Tile();		//loading images
+		level = new Level();
+		character = new Character(Tile.tileSize, Tile.tileSize*2);
 		
 		//start the game loop
 		isRunning = true;
@@ -37,15 +45,19 @@ public class Main extends Applet implements Runnable
 	
 	public void tick()
 	{
-		
+		level.tick();
+		character.tick();
 	}
 	
 	public void render()
 	{
 		Graphics g = screen.getGraphics();
 		
-		g.setColor(new Color(0,100,255));
-		g.fillRect(0, 0, 100, 100);
+		g.setColor(new Color(0, 150, 255));
+		g.fillRect(0, 0, pixel.width, pixel.height);
+		
+		level.render(g);
+		character.render(g);
 		
 		g = getGraphics();
 		g.drawImage(screen, 0, 0, size.width, size.height, 0, 0, pixel.width, pixel.height, null);
