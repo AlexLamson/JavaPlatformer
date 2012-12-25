@@ -5,8 +5,13 @@ import java.awt.*;
 public class Character extends DoubleRectangle
 {
 	
-	public double fallingSpeed = 1.2;
+	public double fallingSpeed = 1;
 	public double movingSpeed = 0.5;
+	public double jumpingSpeed = 1;
+	
+	public int jumpingHeight = 50, jumpingCount = 0;
+	
+	public boolean isJumping = false;
 	
 	public Character(int width, int height)
 	{
@@ -15,16 +20,61 @@ public class Character extends DoubleRectangle
 	
 	public void tick()
 	{
-		if(!isCollidingWithBlock(new Point((int)x, (int)(y + height)), new Point((int)(x + width), (int)(y + height)) ))
+		if(!isJumping && !isCollidingWithBlock(new Point((int)x + 2, (int)(y + height)), new Point((int)(x + width - 2), (int)(y + height)) ))
 		{
 			y += fallingSpeed;
 			Main.sY += fallingSpeed;
 		}
+		else
+		{
+			if(Main.isJumping)
+			{
+				isJumping = true;
+			}
+		}
 		
 		if(Main.isMoving == true)
 		{
-			x += Main.dir;
-			Main.sX += Main.dir;
+			boolean canMove = false;
+			
+			if(Main.dir == movingSpeed)
+			{
+				canMove = isCollidingWithBlock(new Point((int)(x + width), (int)y), new Point((int)(x + width), (int)(y + height - 2)) );
+			}
+			else if(Main.dir == -movingSpeed)
+			{
+				canMove = isCollidingWithBlock(new Point((int)x, (int)y),  new Point((int)x, (int)(y + height - 2)) );	// -2 is to not get stuck in the ground
+			}
+			
+			if(!canMove)
+			{
+				x += Main.dir;
+				Main.sX += Main.dir;
+			}
+		}
+		
+		if(isJumping)
+		{
+			if(!isCollidingWithBlock(new Point((int)(x + 2), (int)y), new Point((int)(x + width - 2), (int)y) ))
+			{
+				if(jumpingCount >= jumpingHeight)
+				{
+					isJumping = false;
+					jumpingCount = 0;
+				}
+				else
+				{
+					y -= jumpingSpeed;
+					Main.sY -= jumpingSpeed;
+					
+					jumpingCount++;
+				}
+			}
+			else
+			{
+				isJumping = false;
+				jumpingCount = 0;
+			}
 		}
 	}
 	
@@ -36,12 +86,15 @@ public class Character extends DoubleRectangle
 		{
 			for(int y = (int)(this.y/Tile.tileSize); y < (int)(this.y/Tile.tileSize) + 3; y++)
 			{
-				if(Main.level.block[x][y].id != Tile.air)
+				if(x >= 0 && y >= 0 & x < Main.level.block.length && y < Main.level.block[0].length)
 				{
-					if(Main.level.block[x][y].contains(pt1) || Main.level.block[x][y].contains(pt2))
+					if(Main.level.block[x][y].id != Tile.air)
 					{
-						isColliding = true;
-						break;
+						if(Main.level.block[x][y].contains(pt1) || Main.level.block[x][y].contains(pt2))
+						{
+							isColliding = true;
+							break;
+						}
 					}
 				}
 			}

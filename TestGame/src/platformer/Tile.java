@@ -1,9 +1,7 @@
 package platformer;
 
 import java.awt.image.*;
-import javax.imageio.*;
 import java.io.*;
-
 import javax.imageio.ImageIO;
 
 public class Tile {
@@ -26,6 +24,3 @@ public class Tile {
 	}
 	
 }
-
-//https://www.youtube.com/watch?v=jM7-5ScztpQ
-//0:49:25

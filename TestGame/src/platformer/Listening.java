@@ -19,6 +19,9 @@ public class Listening implements KeyListener
 			Main.isMoving = true;
 			Main.dir = -Main.character.movingSpeed;
 			break;
+		case KeyEvent.VK_W:
+			Main.isJumping = true;
+			break;
 		}
 	}
 
@@ -38,6 +41,9 @@ public class Listening implements KeyListener
 			{
 				Main.isMoving = false;
 			}
+			break;
+		case KeyEvent.VK_W:
+			Main.isJumping = false;
 			break;
 		}
 	}

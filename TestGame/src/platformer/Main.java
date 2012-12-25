@@ -17,6 +17,7 @@ public class Main extends Applet implements Runnable
 	
 	public static boolean isRunning = false;
 	public static boolean isMoving = false;
+	public static boolean isJumping = false;
 	
 	private Image screen;
 	
