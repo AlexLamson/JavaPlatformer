@@ -9,7 +9,7 @@ public class Character extends DoubleRectangle
 	public double movingSpeed = 0.5;
 	public double jumpingSpeed = 1;
 	
-	public int jumpingHeight = 50, jumpingCount = 0;
+	public int jumpingHeight = 60, jumpingCount = 0;
 	
 	public boolean isJumping = false;
 	

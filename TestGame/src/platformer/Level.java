@@ -4,7 +4,8 @@ import java.awt.*;
 
 public class Level
 {
-	public Block[][] block = new Block[50][50];
+	public int worldW = 50, worldH = 20;
+	public Block[][] block = new Block[worldW][worldH];
 
 	public Level()
 	{
@@ -40,11 +41,16 @@ public class Level
 	
 	public void render(Graphics g)
 	{
-		for(int x = 0; x < block.length; x++)
+		int camX = (int)Main.sX / Tile.tileSize;
+		int camY = (int)Main.sY / Tile.tileSize;
+		int extraTiles = 2;								//tiles to render that not visible
+		
+		for(int x = camX; x < camX + (Main.pixel.width / Tile.tileSize) + extraTiles; x++)
 		{
-			for(int y = 0; y < block[0].length; y++)
+			for(int y = camY; y < camY + (Main.pixel.height / Tile.tileSize) + extraTiles; y++)
 			{
-				block[x][y].render(g);
+				if(x >= 0 && x < block.length && y >= 0 && y < block[0].length)
+					block[x][y].render(g);
 			}
 		}
 	}
