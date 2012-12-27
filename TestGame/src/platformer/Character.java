@@ -10,6 +10,8 @@ public class Character extends DoubleRectangle
 	public double jumpingSpeed = 1;
 	
 	public int jumpingHeight = 60, jumpingCount = 0;
+	public int animation = 0, totalFrames = 3;					//totalFrames is the number of running frames
+	public int animationFrame = 0, animationTime = 30;
 	
 	public boolean isJumping = false;
 	
@@ -46,11 +48,33 @@ public class Character extends DoubleRectangle
 				canMove = isCollidingWithBlock(new Point((int)x, (int)y),  new Point((int)x, (int)(y + height - 2)) );	// -2 is to not get stuck in the ground
 			}
 			
+			if(animationFrame >= animationTime)
+			{
+				if(animation > totalFrames-1)
+				{
+					animation = 1;
+				}
+				else
+				{
+					animation++;
+				}
+				
+				animationFrame = 0;
+			}
+			else
+			{
+				animationFrame++;
+			}
+			
 			if(!canMove)
 			{
 				x += Main.dir;
 				Main.sX += Main.dir;
 			}
+		}
+		else	//is not moving
+		{
+			animation = 0;
 		}
 		
 		if(isJumping)
@@ -105,7 +129,19 @@ public class Character extends DoubleRectangle
 	
 	public void render(Graphics g)
 	{
-		g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY), Tile.character[0]*Tile.tileSize, Tile.character[1]*Tile.tileSize, Tile.character[0]*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize + (int)height, null);
+		if(Main.dir > 0)
+		{
+			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
+					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize,
+					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize + (int)height, null);
+		}
+		else
+		{
+			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
+					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize,
+					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize + (int)height, null);
+		}
+		
 //		g.setColor(new Color(255,0,0));
 //		g.drawRect((int)(x - Main.sX), (int)(y - Main.sY), (int)width, (int)height);
 	}
