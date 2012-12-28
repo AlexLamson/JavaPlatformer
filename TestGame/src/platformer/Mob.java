@@ -1,25 +1,30 @@
 package platformer;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.util.Random;
 
-public class Character extends DoubleRectangle
+public class Mob extends DoubleRectangle
 {
-	
-	public double fallingSpeed = 1;
-	public double movingSpeed = 0.5;
-	public double jumpingSpeed = 1;
-	public double sprintingSpeed = 2;
-	
-	public int jumpingHeight = 60, jumpingCount = 0;
-	public int walkAnimation = 30, sprintAnimation = 20;
-	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
-	public int animationFrame = 0, animationTime = walkAnimation;
+	public int[] id;
 	
 	public boolean isJumping = false;
+	public boolean isMoving = false;
+	public boolean isFalling = false;
 	
-	public Character(int width, int height)
+	public double movementSpeed = 0.4;
+	public double fallingSpeed = 1;
+	public double jumpingSpeed = 1;
+	public double dir = movementSpeed;
+	
+	public int jumpingHeight = 60, jumpingCount = 0;
+	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
+	public int animationFrame = 0, animationTime = 30;
+	
+	public Mob(int x, int y, int width, int height, int[] id)
 	{
-		setBounds((Main.pixel.width/2) - (width/2), (Main.pixel.height/2) - (height/2), width, height);
+		setBounds(x, y, width, height);
+		this.id = id;
 	}
 	
 	public void tick()
@@ -27,28 +32,39 @@ public class Character extends DoubleRectangle
 		if(!isJumping && !isCollidingWithBlock(new Point((int)x + 2, (int)(y + height)), new Point((int)(x + width - 2), (int)(y + height)) ))
 		{
 			y += fallingSpeed;
-			Main.sY += fallingSpeed;
+			isFalling = true;
 		}
 		else
 		{
-			if(Main.isJumping && !Inventory.isOpen)
+			isFalling = false;
+			isJumping = false;
+			if(new Random().nextInt(100) < 1)
 			{
-				isJumping = true;
+				isMoving = true;
+				
+				if(new Random().nextInt(100) < 50)
+					dir = -movementSpeed;
+				else
+					dir = movementSpeed;
 			}
 		}
 		
-		if(Main.isMoving && !Inventory.isOpen)
+		if(isMoving)
 		{
 			boolean canMove = false;
 			
-			if(Main.dir > 0)
+			if(dir > 0)
 			{
 				canMove = isCollidingWithBlock(new Point((int)(x + width), (int)y), new Point((int)(x + width), (int)(y + height - 2)) );
-				
 			}
-			else if(Main.dir < 0)
+			else if(dir < 0)
 			{
 				canMove = isCollidingWithBlock(new Point((int)x, (int)y),  new Point((int)x, (int)(y + height - 2)) );	// -2 is to not get stuck in the ground
+			}
+			
+			if(!canMove && !isFalling)
+			{
+				isJumping = true;
 			}
 			
 			if(animationFrame >= animationTime)
@@ -71,22 +87,12 @@ public class Character extends DoubleRectangle
 			
 			if(!canMove)
 			{
-				x += Main.dir;
-				Main.sX += Main.dir;
+				x += dir;
 			}
 		}
 		else	//is not moving
 		{
 			animation = 0;
-		}
-		
-		if(Main.isSprinting)
-		{
-			animationTime = sprintAnimation;
-		}
-		else
-		{
-			animationTime = walkAnimation;
 		}
 		
 		if(isJumping)
@@ -101,7 +107,6 @@ public class Character extends DoubleRectangle
 				else
 				{
 					y -= jumpingSpeed;
-					Main.sY -= jumpingSpeed;
 					
 					jumpingCount++;
 				}
@@ -141,20 +146,17 @@ public class Character extends DoubleRectangle
 	
 	public void render(Graphics g)
 	{
-		if(Main.dir > 0)
+		if(dir >= 0)
 		{
 			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
-					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize,
-					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize + (int)height, null);
+					(id[0] + animation)*Tile.tileSize, id[1]*Tile.tileSize,
+					(id[0] + animation)*Tile.tileSize + (int)width, id[1]*Tile.tileSize + (int)height, null);
 		}
 		else
 		{
 			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
-					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize,
-					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize + (int)height, null);
+					(id[0] + animation)*Tile.tileSize + (int)width, id[1]*Tile.tileSize,
+					(id[0] + animation)*Tile.tileSize, id[1]*Tile.tileSize + (int)height, null);
 		}
-		
-//		g.setColor(new Color(255,0,0));
-//		g.drawRect((int)(x - Main.sX), (int)(y - Main.sY), (int)width, (int)height);
 	}
 }

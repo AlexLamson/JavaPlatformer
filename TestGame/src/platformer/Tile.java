@@ -12,12 +12,18 @@ public class Tile {
 	public static int invCellSpace = 4;
 	public static int invBorderSpace = 4;
 	public static int invItemBorder = 3;
+	public static int invHeight = 4;
 	
-	public static int[] air = {-1, -1};
-	public static int[] earth = {0, 0};
-	public static int[] grass = {1, 0};
-	public static int[] sand = {2, 0};
+	public static final int[] air = {-1, -1};
+	public static final int[] earth = {0, 0};
+	public static final int[] grass = {1, 0};
+	public static final int[] sand = {2, 0};
+	public static final int[] solidAir = {3, 0};
+	public static final int[] bedrock = {4, 0};
+	public static final int[] wood = {5, 0};
+	public static final int[] leaves = {6, 0};
 	
+	public static int[] mobIggy = {0, 16};
 	public static int[] character = {0, 18};
 	
 	public static BufferedImage tileset_terrian;

@@ -1,6 +1,8 @@
 package platformer;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 public class Cell extends Rectangle
@@ -15,6 +17,12 @@ public class Cell extends Rectangle
 	
 	public void render(Graphics g, boolean isSelected)
 	{
+		if(Inventory.isOpen && contains(new Point(Main.mse.x / Main.pixelSize, Main.mse.y / Main.pixelSize)))
+		{
+			g.setColor(new Color(255, 255, 255, 120));
+			g.fillRect(x, y, width, height);
+		}
+		
 		g.drawImage(Tile.tile_cell, x - 1, y - 1, width + 2, height + 2, null);
 		
 		if(id != Tile.air)

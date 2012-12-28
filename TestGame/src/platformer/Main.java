@@ -3,6 +3,7 @@ package platformer;
 import java.applet.*;
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
 public class Main extends Applet implements Runnable
 {
@@ -10,6 +11,7 @@ public class Main extends Applet implements Runnable
 	public static double sX = 0, sY = 0;
 	public static double dir = 0;
 	
+	public static Dimension realSize;
 	public static Dimension size = new Dimension(700,560);		//will hold the window dimensions
 	public static Dimension pixel = new Dimension(size.width/pixelSize, size.height/pixelSize);
 	
@@ -30,6 +32,7 @@ public class Main extends Applet implements Runnable
 	public static Character character;
 	public static Inventory inventory;
 	public static Sky sky;
+	public static ArrayList<Mob> mob = new ArrayList<Mob>();
 	
 	public Main()
 	{
@@ -43,12 +46,15 @@ public class Main extends Applet implements Runnable
 	
 	public void start()
 	{
+		requestFocus();
+		
 		//defining objects
 		new Tile();		//loading images
 		level = new Level();
+		sky = new Sky();
 		character = new Character(Tile.tileSize, Tile.tileSize*2);
 		inventory = new Inventory();
-		sky = new Sky();
+		mob.add(new Iggy(50,10,Tile.tileSize,Tile.tileSize*2,Tile.mobIggy));
 		
 		//start the game loop
 		isRunning = true;
@@ -62,9 +68,19 @@ public class Main extends Applet implements Runnable
 	
 	public void tick()
 	{
+		if(frame.getWidth() != realSize.width || frame.getHeight() != realSize.height)
+		{
+			frame.pack();
+		}
+		
 		level.tick();
 		character.tick();
 		sky.tick();
+		for(int i = 0; i < mob.toArray().length; i++)
+		{
+			mob.get(i).tick();
+		}
+		
 	}
 	
 	public void render()
@@ -75,12 +91,19 @@ public class Main extends Applet implements Runnable
 //		g.fillRect(0, 0, pixel.width, pixel.height);
 		
 		sky.render(g);
-		
 		level.render(g);
 		character.render(g);
 		inventory.render(g);
 		
+		for(int i = 0; i < mob.toArray().length; i++)
+		{
+			mob.get(i).render(g);
+		}
+		
+		//new Iggy(10,10,Tile.tileSize,Tile.tileSize*2,Tile.mobIggy).render(g);
+		
 		g = getGraphics();
+		
 		g.drawImage(screen, 0, 0, size.width, size.height, 0, 0, pixel.width, pixel.height, null);
 		g.dispose();		//throw it away to avoid lag from too many graphics objects
 	}
@@ -101,14 +124,18 @@ public class Main extends Applet implements Runnable
 		}
 	}
 	
+	private static JFrame frame;
 	public static void main(String[] args) {
 		Main main = new Main();
 		
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.add(main);
 		frame.pack();
+		
+		realSize = new Dimension(frame.getWidth(), frame.getHeight());
+		
 		frame.setTitle(windowName);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);		//null makes it go to the center
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);

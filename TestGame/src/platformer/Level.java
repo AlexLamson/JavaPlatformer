@@ -5,8 +5,12 @@ import java.util.*;		//will use later for the randomness in level generation
 
 public class Level
 {
-	public static int worldW = 50, worldH = 20;
+	public static int worldW = 50, worldH = 50;
 	public static Block[][] block = new Block[worldW][worldH];
+	
+	public int treeTrunkHeight = 4;
+	public int leavesHeight = 3;
+	public int leavesWidth = 3;
 
 	public Level()
 	{
@@ -67,10 +71,16 @@ public class Level
 					}
 				}
 				
-				//place the outside edge
-				if(x == 0 || y == 0 || x == block.length-1 || y == block[0].length-1)
+				//place the solid air on the sides
+				if(x == 0 || x == block.length-1)
 				{
-					block[x][y].id = Tile.sand;
+					block[x][y].id = Tile.solidAir;
+				}
+				
+				//place the bedrock on the bottom
+				if(x > 0 && x < block.length-1 && y == block.length-1)
+				{
+					block[x][y].id = Tile.bedrock;
 				}
 			}
 		}
@@ -79,8 +89,36 @@ public class Level
 		{
 			for(int x = 0; x < block.length; x++)
 			{
+				//turn the top layer of dirt into grass
 				if(block[x][y].id == Tile.earth && block[x][y-1].id == Tile.air)
 					block[x][y].id = Tile.grass;
+				
+				//place trees
+				try
+				{
+					if(block[x][y].id == Tile.grass)
+					{
+						if(new Random().nextInt(100) < 10)
+						{
+							for(int i = 0; i < treeTrunkHeight; i++)
+							{
+								block[x][y-i].id = Tile.wood;
+							}
+							
+							for(int y2 = 0; y2 < leavesHeight; y2++)
+							{
+								for(int x2 = 0; x2 < leavesWidth; x2++)
+								{
+									System.out.print(x+x2);
+									System.out.print(", ");
+									System.out.println(y+y2-treeTrunkHeight);
+									block[x + x2 - leavesWidth/2][y - y2 - treeTrunkHeight].id = Tile.leaves;
+								}
+							}
+							//block[x][y-treeTrunkHeight].id = Tile.leaves;
+						}
+					}
+				}catch(Exception e){ }
 			}
 		}
 	}
@@ -100,15 +138,16 @@ public class Level
 					if(x >= 0 && x < block.length && y >= 0 && y < block[0].length)
 						if(block[x][y].contains(new Point((int)Main.sX + Main.mse.x/Main.pixelSize, (int)Main.sY + Main.mse.y/Main.pixelSize)))
 						{
-							int[] sid = Main.inventory.invBar[Inventory.selected].id;
+							int[] sid = Inventory.invBar[Inventory.selected].id;
 							
 							if(Main.isMouseLeft)
 							{
+								if(block[x][y].id != Tile.solidAir)
 									block[x][y].id = Tile.air;
 							}
 							else if(Main.isMouseRight)
 							{
-								if(sid != Tile.air)
+								if(sid != Tile.air && block[x][y].id != Tile.solidAir)
 								{
 									block[x][y].id = sid;
 									
@@ -133,7 +172,8 @@ public class Level
 	
 	public void tick()
 	{
-		building();
+		if(!Inventory.isOpen)
+			building();
 	}
 	
 	public void render(Graphics g)
@@ -147,7 +187,18 @@ public class Level
 			for(int y = camY; y < camY + (Main.pixel.height / Tile.tileSize) + extraTiles; y++)
 			{
 				if(x >= 0 && x < block.length && y >= 0 && y < block[0].length)
+				{
 					block[x][y].render(g);
+					
+					if(block[x][y].id != Tile.air && block[x][y].id != Tile.solidAir && !Inventory.isOpen)
+					{
+						if(block[x][y].contains(new Point((int)Main.sX + Main.mse.x/Main.pixelSize, (int)Main.sY + Main.mse.y/Main.pixelSize)))
+						{
+							g.setColor(new Color(255, 255, 255, 100));
+							g.fillRect(block[x][y].x - (int)Main.sX, block[x][y].y - (int)Main.sY, block[x][y].width, block[x][y].height);
+						}
+					}
+				}
 			}
 		}
 	}

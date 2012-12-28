@@ -36,6 +36,10 @@ public class Listening implements KeyListener, MouseListener, MouseMotionListene
 			if(Math.abs(Main.dir) < Main.character.sprintingSpeed * Main.character.movingSpeed)
 				Main.dir *= Main.character.sprintingSpeed;
 			break;
+			
+		case KeyEvent.VK_F:
+			Inventory.isOpen = !Inventory.isOpen; 
+			break;
 		
 		//basic digging controls
 		case KeyEvent.VK_DOWN:
@@ -109,6 +113,8 @@ public class Listening implements KeyListener, MouseListener, MouseMotionListene
 		{
 			Main.isMouseRight = true;
 		}
+		
+		Inventory.click(e);
 	}
 
 	public void mouseReleased(MouseEvent e) {
