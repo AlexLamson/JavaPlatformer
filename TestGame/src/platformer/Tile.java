@@ -11,6 +11,7 @@ public class Tile {
 	public static int invCellSize = 25;
 	public static int invCellSpace = 4;
 	public static int invBorderSpace = 4;
+	public static int invItemBorder = 3;
 	
 	public static int[] air = {-1, -1};
 	public static int[] earth = {0, 0};

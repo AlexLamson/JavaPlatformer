@@ -29,6 +29,7 @@ public class Main extends Applet implements Runnable
 	public static Level level;
 	public static Character character;
 	public static Inventory inventory;
+	public static Sky sky;
 	
 	public Main()
 	{
@@ -47,6 +48,7 @@ public class Main extends Applet implements Runnable
 		level = new Level();
 		character = new Character(Tile.tileSize, Tile.tileSize*2);
 		inventory = new Inventory();
+		sky = new Sky();
 		
 		//start the game loop
 		isRunning = true;
@@ -62,14 +64,17 @@ public class Main extends Applet implements Runnable
 	{
 		level.tick();
 		character.tick();
+		sky.tick();
 	}
 	
 	public void render()
 	{
 		Graphics g = screen.getGraphics();
 		
-		g.setColor(new Color(0, 150, 255));
-		g.fillRect(0, 0, pixel.width, pixel.height);
+//		g.setColor(new Color(0, 150, 255));
+//		g.fillRect(0, 0, pixel.width, pixel.height);
+		
+		sky.render(g);
 		
 		level.render(g);
 		character.render(g);

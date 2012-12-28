@@ -100,7 +100,31 @@ public class Level
 					if(x >= 0 && x < block.length && y >= 0 && y < block[0].length)
 						if(block[x][y].contains(new Point((int)Main.sX + Main.mse.x/Main.pixelSize, (int)Main.sY + Main.mse.y/Main.pixelSize)))
 						{
-							block[x][y].id = Tile.air;
+							int[] sid = Main.inventory.invBar[Inventory.selected].id;
+							
+							if(Main.isMouseLeft)
+							{
+									block[x][y].id = Tile.air;
+							}
+							else if(Main.isMouseRight)
+							{
+								if(sid != Tile.air)
+								{
+									block[x][y].id = sid;
+									
+//									if(block[x][y].id == Tile.earth && block[x][y-1].id == Tile.air)
+//										block[x][y].id = Tile.grass;
+//									
+//									if(block[x][y].id == Tile.grass && block[x][y-1].id != Tile.air)
+//										block[x][y].id = Tile.earth;
+//									
+//									if(block[x][y+1].id == Tile.grass)
+//										block[x][y+1].id = Tile.earth;
+								}
+							}
+							
+							
+							
 						}
 				}
 			}

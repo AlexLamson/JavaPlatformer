@@ -131,7 +131,28 @@ public class Listening implements KeyListener, MouseListener, MouseMotionListene
 	}
 	
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		
+		if(e.getWheelRotation() < 0)		//scrolled up
+		{
+			if(Inventory.selected < Tile.invCellLength-1)
+			{
+				Inventory.selected++;
+			}
+			else
+			{
+				Inventory.selected = 0;
+			}
+		}
+		else if(e.getWheelRotation() > 0)		//scrolled down
+		{
+			if(Inventory.selected > 0)
+			{
+				Inventory.selected--;
+			}
+			else
+			{
+				Inventory.selected = Tile.invCellLength-1;
+			}
+		}
 	}
 
 }
