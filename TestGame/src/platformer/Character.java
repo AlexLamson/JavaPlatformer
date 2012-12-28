@@ -8,10 +8,12 @@ public class Character extends DoubleRectangle
 	public double fallingSpeed = 1;
 	public double movingSpeed = 0.5;
 	public double jumpingSpeed = 1;
+	public double sprintingSpeed = 2;
 	
 	public int jumpingHeight = 60, jumpingCount = 0;
-	public int animation = 0, totalFrames = 3;					//totalFrames is the number of running frames
-	public int animationFrame = 0, animationTime = 30;
+	public int walkAnimation = 30, sprintAnimation = 20;
+	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
+	public int animationFrame = 0, animationTime = walkAnimation;
 	
 	public boolean isJumping = false;
 	
@@ -39,11 +41,11 @@ public class Character extends DoubleRectangle
 		{
 			boolean canMove = false;
 			
-			if(Main.dir == movingSpeed)
+			if(Main.dir > 0)
 			{
 				canMove = isCollidingWithBlock(new Point((int)(x + width), (int)y), new Point((int)(x + width), (int)(y + height - 2)) );
 			}
-			else if(Main.dir == -movingSpeed)
+			else if(Main.dir < 0)
 			{
 				canMove = isCollidingWithBlock(new Point((int)x, (int)y),  new Point((int)x, (int)(y + height - 2)) );	// -2 is to not get stuck in the ground
 			}
@@ -75,6 +77,15 @@ public class Character extends DoubleRectangle
 		else	//is not moving
 		{
 			animation = 0;
+		}
+		
+		if(Main.isSprinting)
+		{
+			animationTime = sprintAnimation;
+		}
+		else
+		{
+			animationTime = walkAnimation;
 		}
 		
 		if(isJumping)
@@ -129,7 +140,7 @@ public class Character extends DoubleRectangle
 	
 	public void render(Graphics g)
 	{
-		if(Main.dir > 0)
+		if(Main.dir >= 0)
 		{
 			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
 					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize,
