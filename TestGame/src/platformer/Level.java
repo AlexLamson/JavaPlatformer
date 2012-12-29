@@ -20,6 +20,7 @@ public class Level
 		{
 			for(int y = 0; y < block[0].length; y++)
 			{
+				//fill up the array with air blocks
 				block[x][y] = new Block(new Rectangle(x*Tile.tileSize, y*Tile.tileSize, Tile.tileSize, Tile.tileSize), Tile.air);
 			}
 		}
@@ -31,47 +32,64 @@ public class Level
 	{
 		for(int y = 0; y < block[0].length; y++)
 		{
-			for(int x = 0; x < block.length; x++)
+			for(int x = 0; x < block.length; x++)		//read the blocks row by row
 			{
 				
 				if(y > worldH/4 + 2)
 				{
+					//place right side of hill
 					if(new Random().nextInt(100) > 20)
 					{
-						try
+						if(check(x-1, y-1, Tile.earth))
 						{
-							if(block[x-1][y-1].id == Tile.earth)
-							{
-								block[x][y].id = Tile.earth;
-							}
-						}catch(Exception e){}
+							place(x, y, Tile.earth);
+						}
 					}
 					
+					//place left side of hill
 					if(new Random().nextInt(100) > 30)
 					{
-						try
+						if(check(x+1, y-1, Tile.earth))
 						{
-							if(block[x+1][y-1].id == Tile.earth)
-							{
-								block[x][y].id = Tile.earth;
-							}
-						}catch(Exception e){}
+							place(x, y, Tile.earth);
+						}
 					}
 					
-						try
-						{
-							if(block[x][y-1].id == Tile.earth)
-							{
-								block[x][y].id = Tile.earth;
-							}
-						}catch(Exception e){}
+					//place peak of hill
+					if(check(x, y-1, Tile.earth))
+					{
+						place(x, y, Tile.earth);
+					}
 					
-					
+					//create base for hills
 					if(new Random().nextInt(100) < 10)
 					{
 						block[x][y].id = Tile.earth;
 					}
 				}
+//				if(y > worldH/2)
+//				{
+//					if(check(x, y, Tile.air))
+//					{
+//						block[x][y].id = Tile.earth;
+//					}
+//					
+//					int test = new Random().nextInt(100);
+//					if(test <= 5)
+//					{
+//						place(x,y,Tile.leaves);
+//						
+//						place(x-1, y, Tile.sand);
+//						place(x+1, y, Tile.sand);
+//						place(x-1, y-1, Tile.sand);
+//						place(x-1, y+1, Tile.sand);
+//
+//						place(x-1, y-1, Tile.sand);
+//						place(x-1, y+1, Tile.sand);
+//						place(x+1, y-1, Tile.sand);
+//						place(x+1, y+1, Tile.sand);
+//					}
+//				}
 				
 				//place the solid air on the sides
 				if(x == 0 || x == block.length-1)
@@ -92,35 +110,53 @@ public class Level
 			for(int x = 0; x < block.length; x++)
 			{
 				//turn the top layer of dirt into grass
-				if(block[x][y].id == Tile.earth && block[x][y-1].id == Tile.air)
-					block[x][y].id = Tile.grass;
+				if(check(x, y, Tile.earth) && check(x, y-1, Tile.air))
+					place(x, y, Tile.grass);
 				
 				//place trees
 				if(makeTrees)
 				{
-					try
+					if(check(x, y, Tile.grass))
 					{
-						if(block[x][y].id == Tile.grass)
+						if(new Random().nextInt(100) < 10)
 						{
-							if(new Random().nextInt(100) < 10)
+							place(x, y, Tile.earth);
+							for(int i = 0; i < treeTrunkHeight; i++)
 							{
-								block[x][y].id = Tile.earth;
-								for(int i = 0; i < treeTrunkHeight; i++)
+								place(x, y - i - 1, Tile.wood);
+							}
+							
+							for(int y2 = 0; y2 < leavesHeight; y2++)
+							{
+								for(int x2 = 0; x2 < leavesWidth; x2++)
 								{
-									block[x][y - i - 1].id = Tile.wood;
-								}
-								
-								for(int y2 = 0; y2 < leavesHeight; y2++)
-								{
-									for(int x2 = 0; x2 < leavesWidth; x2++)
-									{
-										block[x + x2 - leavesWidth/2][y - y2 - treeTrunkHeight - 1].id = Tile.leaves;
-									}
+									place(x + x2 - leavesWidth/2, y - y2 - treeTrunkHeight - 1, Tile.leaves);
 								}
 							}
 						}
-					}catch(Exception e){ }
+					}
 				}
+			}
+		}
+	}
+	
+	public static boolean check(int x, int y, int[] id)
+	{
+		if(x >= 0 && x < block.length && y >= 0 && y < block[0].length)
+		{
+			if(block[x][y].id == id)
+				return true;
+		}
+		return false;
+	}
+	
+	public static void place(int x, int y, int[] id)
+	{
+		if(x >= 0 && x < block.length && y >= 0 && y < block[0].length)
+		{
+			if(block[x][y].id != Tile.bedrock && block[x][y].id != Tile.solidAir)
+			{
+				block[x][y].id = id;
 			}
 		}
 	}
@@ -149,18 +185,18 @@ public class Level
 							}
 							else if(Main.isMouseRight)
 							{
-								if(sid != Tile.air && block[x][y].id != Tile.solidAir && block[x][y].id != Tile.bedrock)
+								if(sid != Tile.air)
 								{
-									block[x][y].id = sid;
+									place(x, y, sid);
 									
-//									if(block[x][y].id == Tile.earth && block[x][y-1].id == Tile.air)
-//										block[x][y].id = Tile.grass;
-//									
-//									if(block[x][y].id == Tile.grass && block[x][y-1].id != Tile.air)
-//										block[x][y].id = Tile.earth;
-//									
-//									if(block[x][y+1].id == Tile.grass)
-//										block[x][y+1].id = Tile.earth;
+//									if(check(x, y, Tile.earth) && check(x, y-1, Tile.air))
+//										place(x, y, Tile.grass);
+//
+//									if(check(x, y, Tile.grass) && !check(x, y-1, Tile.air))
+//										place(x, y, Tile.earth);
+//
+//									if(check(x, y+1, Tile.grass))
+//										place(x, y+1, Tile.earth);
 								}
 							}
 							

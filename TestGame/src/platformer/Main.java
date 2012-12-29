@@ -10,6 +10,7 @@ public class Main extends Applet implements Runnable
 	public static int pixelSize = 2;
 	public static double sX = 0, sY = 0;
 	public static double dir = 0;
+	public static boolean facingLeft = false;
 	
 	public static Dimension realSize;
 	public static Dimension size = new Dimension(700,560);		//will hold the window dimensions
@@ -77,11 +78,17 @@ public class Main extends Applet implements Runnable
 		level.tick();
 		character.tick();
 		sky.tick();
-		for(int i = 0; i < mob.toArray().length; i++)
+		for(int i = 0; i < mob.size(); i++)
 		{
-			mob.get(i).tick();
+			if(mob.get(i) != null)
+			{
+				mob.get(i).tick();
+			}
+			else
+			{
+				Spawner.killMob(i);		//why? because errors!
+			}
 		}
-		
 	}
 	
 	public void render()

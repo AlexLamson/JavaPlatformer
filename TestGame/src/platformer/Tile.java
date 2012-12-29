@@ -35,17 +35,17 @@ public class Tile {
 		try
 		{
 			Tile.tileset_terrian = ImageIO.read(new File("res/tileset_terrian.png"));
-		}catch(Exception e){ }
+		}catch(Exception e){ System.err.println("Terrian image load failed!"); }
 		
 		try
 		{
 			Tile.tile_cell = ImageIO.read(new File("res/tile_cell.png"));
-		}catch(Exception e){ }
+		}catch(Exception e){ System.err.println("Tile cell image load failed!"); }
 		
 		try
 		{
 			Tile.tile_select = ImageIO.read(new File("res/tile_select.png"));
-		}catch(Exception e){ }
+		}catch(Exception e){ System.err.println("Tile select image load failed!"); }
 	}
 	
 }

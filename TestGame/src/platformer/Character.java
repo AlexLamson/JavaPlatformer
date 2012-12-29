@@ -111,6 +111,15 @@ public class Character extends DoubleRectangle
 				jumpingCount = 0;
 			}
 		}
+		
+		if(Main.facingLeft && Main.dir > 0)
+		{
+			Main.facingLeft = false;
+		}
+		else if(!Main.facingLeft && Main.dir < 0)
+		{
+			Main.facingLeft = true;
+		}
 	}
 	
 	public boolean isCollidingWithBlock(Point pt1, Point pt2)
@@ -140,17 +149,17 @@ public class Character extends DoubleRectangle
 	
 	public void render(Graphics g)
 	{
-		if(Main.dir > 0)
-		{
-			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
-					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize,
-					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize + (int)height, null);
-		}
-		else
+		if(Main.facingLeft)
 		{
 			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
 					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize,
 					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize + (int)height, null);
+		}
+		else if(!Main.facingLeft)
+		{
+			g.drawImage(Tile.tileset_terrian, (int)(x - Main.sX), (int)(y - Main.sY), (int)(x + width - Main.sX), (int)(y + height - Main.sY),
+					(Tile.character[0] + animation)*Tile.tileSize, Tile.character[1]*Tile.tileSize,
+					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize + (int)height, null);
 		}
 		
 //		g.setColor(new Color(255,0,0));

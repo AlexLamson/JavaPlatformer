@@ -43,18 +43,18 @@ public class Listening implements KeyListener, MouseListener, MouseMotionListene
 		
 		//basic digging controls
 		case KeyEvent.VK_DOWN:
-			Level.block[(int)((Main.character.x+Tile.tileSize/2)/Tile.tileSize)][(int)(Main.character.y/Tile.tileSize)+2].id = Tile.air;	//turn the block below into air
+			Level.place((int)((Main.character.x+Tile.tileSize/2)/Tile.tileSize), (int)(Main.character.y/Tile.tileSize)+2, Tile.air);
 			break;
 		case KeyEvent.VK_UP:
-			Level.block[(int)((Main.character.x+Tile.tileSize/2)/Tile.tileSize)][(int)(Main.character.y/Tile.tileSize)-1].id = Tile.air;	//turn the block below into air
+			Level.place((int)((Main.character.x+Tile.tileSize/2)/Tile.tileSize), (int)(Main.character.y/Tile.tileSize)-1, Tile.air);
 			break;
 		case KeyEvent.VK_LEFT:
-			Level.block[(int)((Main.character.x-Tile.tileSize/2)/Tile.tileSize)][(int)(Main.character.y/Tile.tileSize)].id = Tile.air;
-			Level.block[(int)((Main.character.x-Tile.tileSize/2)/Tile.tileSize)][(int)((Main.character.y+Tile.tileSize)/Tile.tileSize)].id = Tile.air;
+			Level.place((int)((Main.character.x-Tile.tileSize/2)/Tile.tileSize), (int)(Main.character.y/Tile.tileSize), Tile.air);
+			Level.place((int)((Main.character.x-Tile.tileSize/2)/Tile.tileSize), (int)((Main.character.y+Tile.tileSize)/Tile.tileSize), Tile.air);
 			break;
 		case KeyEvent.VK_RIGHT:
-			Level.block[(int)((Main.character.x+Tile.tileSize*1.5)/Tile.tileSize)][(int)(Main.character.y/Tile.tileSize)].id = Tile.air;
-			Level.block[(int)((Main.character.x+Tile.tileSize*1.5)/Tile.tileSize)][(int)((Main.character.y+Tile.tileSize)/Tile.tileSize)].id = Tile.air;
+			Level.place((int)((Main.character.x+Tile.tileSize*1.5)/Tile.tileSize), (int)(Main.character.y/Tile.tileSize), Tile.air);
+			Level.place((int)((Main.character.x+Tile.tileSize*1.5)/Tile.tileSize), (int)((Main.character.y+Tile.tileSize)/Tile.tileSize), Tile.air);
 			break;
 		}
 	}
