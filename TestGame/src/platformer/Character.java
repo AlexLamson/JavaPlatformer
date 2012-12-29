@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class Character extends DoubleRectangle
 {
-	
 	public double fallingSpeed = 1;
 	public double movingSpeed = 0.5;
 	public double jumpingSpeed = 1;

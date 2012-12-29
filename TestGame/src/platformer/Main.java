@@ -32,6 +32,7 @@ public class Main extends Applet implements Runnable
 	public static Character character;
 	public static Inventory inventory;
 	public static Sky sky;
+	public static Spawner spawner;
 	public static ArrayList<Mob> mob = new ArrayList<Mob>();
 	
 	public Main()
@@ -49,12 +50,12 @@ public class Main extends Applet implements Runnable
 		requestFocus();
 		
 		//defining objects
-		new Tile();		//loading images
+		new Tile();
 		level = new Level();
 		sky = new Sky();
 		character = new Character(Tile.tileSize, Tile.tileSize*2);
 		inventory = new Inventory();
-		mob.add(new Iggy(50,10,Tile.tileSize,Tile.tileSize*2,Tile.mobIggy));
+		spawner = new Spawner();
 		
 		//start the game loop
 		isRunning = true;

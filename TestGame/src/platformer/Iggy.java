@@ -6,9 +6,9 @@ public class Iggy extends Mob
 {
 	
 	
-	public Iggy(int x, int y, int width, int height, int[] id)
+	public Iggy(int x, int y, int width, int height)
 	{
-		super(x, y, width, height, id);
+		super(x, y, width, height, Tile.mobIggy);
 	}
 	
 	public void tick()
