@@ -1,7 +1,7 @@
 package platformer;
 
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import javax.imageio.ImageIO;
 
 public class Tile {

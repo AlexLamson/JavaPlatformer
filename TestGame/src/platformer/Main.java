@@ -1,9 +1,13 @@
 package platformer;
 
 import java.applet.*;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
 
 public class Main extends Applet implements Runnable
 {

@@ -1,6 +1,7 @@
 package platformer;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
 
 public class Character extends DoubleRectangle
 {

@@ -1,6 +1,6 @@
 package platformer;
 
-import java.util.*;
+import java.util.Random;
 
 public class Spawner implements Runnable
 {

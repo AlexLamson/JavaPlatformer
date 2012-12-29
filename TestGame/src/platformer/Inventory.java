@@ -3,7 +3,7 @@ package platformer;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
 
 public class Inventory
 {
