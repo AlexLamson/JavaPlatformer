@@ -77,11 +77,17 @@ public class Main extends Applet implements Runnable
 		level.tick();
 		character.tick();
 		sky.tick();
-		for(int i = 0; i < mob.toArray().length; i++)
+		for(int i = 0; i < mob.size(); i++)
 		{
-			mob.get(i).tick();
+			if(mob.get(i) != null)
+			{
+				mob.get(i).tick();
+			}
+			else
+			{
+				Spawner.killMob(i);		//why? because errors!
+			}
 		}
-		
 	}
 	
 	public void render()

@@ -12,11 +12,13 @@ public class Mob extends DoubleRectangle
 	public boolean isMoving = false;
 	public boolean isFalling = false;
 	
+	//default attributes
 	public double movementSpeed = 0.4;
 	public double fallingSpeed = 1;
 	public double jumpingSpeed = 1;
 	public double dir = movementSpeed;
 	
+	public int age = 0, lifeSpan = 2000;
 	public int jumpingHeight = 60, jumpingCount = 0;
 	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
 	public int animationFrame = 0, animationTime = 30;
@@ -29,6 +31,8 @@ public class Mob extends DoubleRectangle
 	
 	public void tick()
 	{
+		age++;
+		
 		if(!isJumping && !isCollidingWithBlock(new Point((int)x + 2, (int)(y + height)), new Point((int)(x + width - 2), (int)(y + height)) ))
 		{
 			y += fallingSpeed;
