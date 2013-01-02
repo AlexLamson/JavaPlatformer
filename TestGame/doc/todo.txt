@@ -2,7 +2,12 @@ Here is a list of things that should get done, organized by priority.
 Add items as needed
 Add "Done - " next to (before) completed items
 
-MISC.
+MISC. & BUGFIXES
+make the tick delay change based on the computer specs
+determine the fps
+fix the debug mode
+fix the collisions
+make the player have a username (don't give mobs usernames, though)
 fix all the current errors
 rename character to player for less confusion
 
@@ -10,6 +15,7 @@ OPTIMIZATION
 make the character and mobs extend from the Entity class
 
 NETWORKING
+Put "server" or "client" in title accordingly
 Server to client:
 Player join
 Player health
@@ -18,12 +24,19 @@ Client to server:
 Player rejoin (using same id, and respawn)
 Player move
 
+
 MENUS
 Main menu
 Pause menu
 death menu
 
-GAME FEATURES
+MAPS
+saving to a txt file
+loading from a txt file
+infinite map generation
+	move the map, keep the player still?
+
+GENERAL GAME FEATURES
 spawn location randomization (similar to the mob spawning)
 make the bottom 1/4 of the map be covered in stone
 jet pack/flying
