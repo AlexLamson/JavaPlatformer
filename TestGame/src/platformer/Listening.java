@@ -110,18 +110,31 @@ public class Listening implements KeyListener, MouseListener, MouseMotionListene
 		{
 			Main.isMouseLeft = true;
 		}
+		else if(e.getButton() == MouseEvent.BUTTON2)	//middle click
+		{
+			Main.isMouseMiddle = true;
+		}
 		else if(e.getButton() == MouseEvent.BUTTON3)	//right click
 		{
 			Main.isMouseRight = true;
 		}
 		
-		Inventory.click(e);
+		Main.mse.setLocation(e.getX(), e.getY());
+		
+		if(Main.showMenu)
+			Menu.click();
+		else
+			Inventory.click(e);
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		if(e.getButton() == MouseEvent.BUTTON1)			//left click
 		{
 			Main.isMouseLeft = false;
+		}
+		else if(e.getButton() == MouseEvent.BUTTON2)	//middle click
+		{
+			Main.isMouseMiddle = false;
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)	//right click
 		{
@@ -140,25 +153,17 @@ public class Listening implements KeyListener, MouseListener, MouseMotionListene
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if(e.getWheelRotation() < 0)		//scrolled up
 		{
-			if(Inventory.selected < Tile.invCellLength-1)
-			{
-				Inventory.selected++;
-			}
+			if(Inventory.selected > 0)
+				Inventory.selected--;
 			else
-			{
-				Inventory.selected = 0;
-			}
+				Inventory.selected = Tile.invCellLength-1;
 		}
 		else if(e.getWheelRotation() > 0)		//scrolled down
 		{
-			if(Inventory.selected > 0)
-			{
-				Inventory.selected--;
-			}
+			if(Inventory.selected < Tile.invCellLength-1)
+				Inventory.selected++;
 			else
-			{
-				Inventory.selected = Tile.invCellLength-1;
-			}
+				Inventory.selected = 0;
 		}
 	}
 

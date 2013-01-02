@@ -1,30 +1,48 @@
 package platformer;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.net.InetAddress;
 
 public class Character extends DoubleRectangle
 {
-	public double fallingSpeed = 1;
-	public double movingSpeed = 0.5;
-	public double jumpingSpeed = 1;
-	public double sprintingSpeed = 2;
+	public String username = "";
 	
-	public int jumpingHeight = 60, jumpingCount = 0;
-	public int walkAnimation = 30, sprintAnimation = 20;
-	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
-	public int animationFrame = 0, animationTime = walkAnimation;
+	public double fallingSpeed = 1*Main.computerSpeed;
+	public double movingSpeed = 0.5*Main.computerSpeed;
+	public double jumpingSpeed = 1*Main.computerSpeed;
+	public double sprintingSpeed = 2;
 	
 	public boolean isJumping = false;
 	
-	public Character(int width, int height)
+	public int jumpingHeight = (int)(60/Main.computerSpeed), jumpingCount = 0;
+	public int walkAnimation = (int)(30/Main.computerSpeed), sprintAnimation = (int)(20/Main.computerSpeed);
+	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
+	public int animationFrame = 0, animationTime = walkAnimation;
+
+	public static double sX = 0, sY = 0;
+	public static double dir = 0;
+	public static boolean facingLeft = false;
+	
+	public int xOffset = 2*Main.pixelSize;
+	public int yOffset = 2*Main.pixelSize;
+	
+	public int xSave1 = 0, xSave2 = 0, ySave1 = 0, ySave2 = 0;
+	
+	private Listening listener;
+	
+	public Character(int width, int height, Listening listener, String username)
 	{
+		this.username = username;
 		setBounds((Main.pixel.width/2) - (width/2), (Main.pixel.height/2) - (height/2), width, height);
 	}
 	
 	public void tick()
 	{
-		if(!isJumping && !isCollidingWithBlock(new Point((int)x + 2, (int)(y + height)), new Point((int)(x + width - 2), (int)(y + height)) ))
+		xOffset = 0;
+		yOffset = 2;
+		if(!isJumping && !isCollidingWithBlock(new Point((int)x, (int)(y + height)), new Point((int)(x + width - xOffset), (int)(y + height))) )
 		{
 			y += fallingSpeed;
 			Main.sY += fallingSpeed;
@@ -41,14 +59,17 @@ public class Character extends DoubleRectangle
 		{
 			boolean canMove = false;
 			
+			xOffset = (int)movingSpeed;
+			if(Main.isSprinting)
+				xOffset = (int)sprintingSpeed;
+			
 			if(Main.dir > 0)
 			{
-				canMove = isCollidingWithBlock(new Point((int)(x + width), (int)y), new Point((int)(x + width), (int)(y + height - 2)) );
-				
+				canMove = isCollidingWithBlock(new Point((int)(x + width), (int)(y)), new Point((int)(x + width - xOffset), (int)(y + height - yOffset)) );
 			}
 			else if(Main.dir < 0)
 			{
-				canMove = isCollidingWithBlock(new Point((int)x, (int)y),  new Point((int)x, (int)(y + height - 2)) );	// -2 is to not get stuck in the ground
+				canMove = isCollidingWithBlock(new Point((int)(x - xOffset), (int)(y)),  new Point((int)(x - xOffset), (int)(y + height - yOffset)) );
 			}
 			
 			if(animationFrame >= animationTime)
@@ -91,7 +112,7 @@ public class Character extends DoubleRectangle
 		
 		if(isJumping)
 		{
-			if(!isCollidingWithBlock(new Point((int)(x + 2), (int)y), new Point((int)(x + width - 2), (int)y) ))
+			if(!isCollidingWithBlock(new Point((int)(x), (int)(y - yOffset)), new Point((int)(x + width - xOffset), (int)(y))) )
 			{
 				if(jumpingCount >= jumpingHeight)
 				{
@@ -125,6 +146,13 @@ public class Character extends DoubleRectangle
 	
 	public boolean isCollidingWithBlock(Point pt1, Point pt2)
 	{
+		//save variables for displaying collision info
+		xSave1 = (int)pt1.getX();
+		ySave1 = (int)pt1.getY();
+		xSave2 = (int)pt2.getX();
+		ySave2 = (int)pt2.getY();
+		
+		
 		boolean isColliding = false;
 		
 		for(int x = (int)(this.x/Tile.tileSize); x < (int)(this.x/Tile.tileSize) + 3; x++)
@@ -163,7 +191,14 @@ public class Character extends DoubleRectangle
 					(Tile.character[0] + animation)*Tile.tileSize + (int)width, Tile.character[1]*Tile.tileSize + (int)height, null);
 		}
 		
-//		g.setColor(new Color(255,0,0));
-//		g.drawRect((int)(x - Main.sX), (int)(y - Main.sY), (int)width, (int)height);
+		if(Main.degbugMode)
+		{
+			//draw collision info
+			g.setColor(new Color(255,0,0));
+			g.drawRect((int)(xSave1 - Main.sX), (int)(ySave1 - Main.sY), (int)(xSave2 - xSave1 + xOffset), (int)(ySave2 - ySave1 + yOffset));
+			//g.drawLine((int)(xSave1 - Main.sX), (int)(ySave1 - Main.sY), (int)(x + xSave2 - xSave1 + xOffset - Main.sX), (int)(y + ySave2 - ySave1 + yOffset - Main.sY));
+			g.setColor(new Color(255,255,0));
+			g.drawRect((int)(x - Main.sX), (int)(y - Main.sY), (int)width, (int)height);
+		}
 	}
 }

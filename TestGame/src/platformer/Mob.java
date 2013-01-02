@@ -13,15 +13,15 @@ public class Mob extends DoubleRectangle
 	public boolean isFalling = false;
 	
 	//default attributes
-	public double movementSpeed = 0.4;
-	public double fallingSpeed = 1;
-	public double jumpingSpeed = 1;
+	public double movementSpeed = 0.4*Main.computerSpeed;
+	public double fallingSpeed = 1*Main.computerSpeed;
+	public double jumpingSpeed = 1*Main.computerSpeed;
 	public double dir = movementSpeed;
 	
 	public int age = 0, lifeSpan = 2000;
-	public int jumpingHeight = 60, jumpingCount = 0;
+	public int jumpingHeight = (int)(60/Main.computerSpeed), jumpingCount = 0;
 	public int animation = 0, totalFrames = 3;							//totalFrames is the number of running frames
-	public int animationFrame = 0, animationTime = 30;
+	public int animationFrame = 0, animationTime = (int)(30/Main.computerSpeed);
 	
 	public Mob(int x, int y, int width, int height, int[] id)
 	{
